@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para William</title>
+    <title>Para William | Especial</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
             --gold: #c5a059;
-            --glass: rgba(0, 0, 0, 0.6);
-            --gris: #2c2c2c;
-            --verde: #3d4a3d;
+            --gold-glow: rgba(197, 160, 89, 0.6);
+            --glass: rgba(0, 0, 0, 0.7);
+            --gris-neutro: #2c2c2c;
+            --verde-neutro: #3d4a3d;
         }
 
         body, html {
@@ -20,38 +21,26 @@
             font-family: 'Montserrat', sans-serif;
             color: white;
             overflow: hidden;
-            background: #111;
+            background-color: #1a1a1a;
         }
 
-        /* FONDO CON VIDA: ESFERAS QUE FLUYEN */
-        .background-container {
+        /* FONDO ORIGINAL NEUTRO ANIMADO */
+        .bg-animated {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            overflow: hidden;
-            background: #1a1a1a;
-            filter: blur(80px); /* Esto crea el efecto de mezcla suave */
+            background: linear-gradient(-45deg, #1a1a1a, var(--gris-neutro), var(--verde-neutro), #1a1a1a);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
         }
 
-        .blob {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: move 20s infinite alternate;
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .blob.one { background: var(--gris); top: -10%; left: -10%; }
-        .blob.two { background: var(--verde); bottom: -10%; right: -10%; animation-duration: 25s; }
-        .blob.three { background: #333; top: 40%; left: 30%; animation-duration: 18s; }
-
-        @keyframes move {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(200px, 100px) scale(1.2); }
-        }
-
-        /* PORTADA APARTE */
+        /* PORTADA CON TÍTULO BRILLANTE */
         #portada {
             height: 100vh;
             width: 100%;
@@ -61,16 +50,25 @@
             align-items: center;
             z-index: 100;
             position: fixed;
-            background: rgba(18, 18, 18, 0.9);
+            background: rgba(10, 10, 10, 0.8);
             transition: 1s ease;
         }
 
         #portada h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
+            font-size: clamp(3rem, 10vw, 5rem);
             color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            /* EFECTO DE BRILLO */
+            text-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow), 0 0 40px var(--gold-glow);
+            animation: glow 2s ease-in-out infinite alternate;
             margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); }
+            to { text-shadow: 0 0 20px var(--gold-glow), 0 0 40px var(--gold-glow), 0 0 60px var(--gold); }
         }
 
         .btn-start {
@@ -82,9 +80,16 @@
             cursor: pointer;
             text-transform: uppercase;
             font-weight: 600;
+            transition: 0.4s;
         }
 
-        /* CONTENIDO */
+        .btn-start:hover {
+            background: var(--gold);
+            color: black;
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        /* CONTENIDO DESLIZABLE */
         #main-content {
             display: none;
             height: 100vh;
@@ -98,6 +103,7 @@
             display: flex;
             scroll-snap-align: start;
             position: relative;
+            overflow: hidden;
         }
 
         .foto-lado {
@@ -105,7 +111,7 @@
             background-size: cover;
             background-position: center;
             border-right: 1px solid var(--gold);
-            transform: scale(0.9); opacity: 0;
+            opacity: 0; transform: scale(1.1);
             transition: 1.5s ease;
         }
 
@@ -120,14 +126,15 @@
             text-align: right;
             border-right: 3px solid var(--gold);
             padding-right: 20px;
-            opacity: 0; transform: translateY(30px);
+            opacity: 0; transform: translateX(50px);
             transition: 1s ease 0.5s;
         }
 
-        /* ACTIVACIÓN DE EFECTOS AL DESLIZAR */
-        section.active .foto-lado { transform: scale(1); opacity: 1; }
-        section.active .texto-inner { opacity: 1; transform: translateY(0); }
+        /* ACTIVACIÓN AL DESLIZAR */
+        section.active .foto-lado { opacity: 1; transform: scale(1); }
+        section.active .texto-inner { opacity: 1; transform: translateX(0); }
 
+        /* MÓVIL */
         @media (max-width: 800px) {
             section { flex-direction: column; }
             .foto-lado, .texto-lado { width: 100%; height: 50%; }
@@ -137,51 +144,58 @@
 </head>
 <body>
 
-    <div class="background-container">
-        <div class="blob one"></div>
-        <div class="blob two"></div>
-        <div class="blob three"></div>
-    </div>
+    <audio id="miMusica" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="bg-animated"></div>
 
     <div id="portada">
-        <h1>William.</h1>
+        <h1>William</h1>
         <button class="btn-start" onclick="comenzar()">Empezar</button>
     </div>
 
     <div id="main-content">
         <section id="s1">
             <div class="foto-lado" style="background-image: url('foto1.jpg');"></div>
-            <div class="texto-lado"><div class="texto-inner"><h2>Disciplina</h2><p>"Tu disciplina no tiene límites. Admiro tu fuerza para perseguir metas."</p></div></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Disciplina</h2><p>"Tu disciplina no tiene límites. Admiro tu fuerza para perseguir cada meta que te propones."</p></div></div>
         </section>
 
         <section id="s2">
             <div class="foto-lado" style="background-image: url('foto2.jpg');"></div>
-            <div class="texto-lado"><div class="texto-inner"><h2>Nobleza</h2><p>"Esa bondad genuina es tu luz más brillante en este mundo."</p></div></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Nobleza</h2><p>"Esa bondad genuina es tu luz más brillante. Gracias por ser un hombre de gran corazón."</p></div></div>
         </section>
 
         <section id="s3">
             <div class="foto-lado" style="background-image: url('foto3.jpg');"></div>
-            <div class="texto-lado"><div class="texto-inner"><h2>Recuerdo</h2><p>"Nuestro primer encuentro superó cualquier sueño que tuve."</p></div></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Recuerdo</h2><p>"Nuestro primer encuentro se quedó grabado en mi mente. La realidad superó cualquier sueño."</p></div></div>
         </section>
 
         <section id="s4">
             <div class="foto-lado" style="background-image: url('foto4.jpg');"></div>
-            <div class="texto-lado"><div class="texto-inner"><h2>Esencia</h2><p>"Gracias por ser tan auténtico siempre conmigo."</p></div></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Autenticidad</h2><p>"Admiro que siempre eres tú mismo. Tu esencia es lo que te hace verdaderamente único."</p></div></div>
         </section>
 
         <section id="s5">
             <div class="foto-lado" style="background-image: url('foto5.jpg');"></div>
-            <div class="texto-lado"><div class="texto-inner"><h2>Complicidad</h2><p>"Cada momento a tu lado es un regalo que atesoro profundamente."</p></div></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Complicidad</h2><p>"Cada charla y cada momento compartido es un tesoro que guardo con mucho cariño."</p></div></div>
         </section>
 
         <section id="s6">
             <div class="foto-lado" style="background-image: url('foto6.jpg');"></div>
-            <div class="texto-lado"><div class="texto-inner"><h2>Feliz Día</h2><p>"Que este año sea tan increíble como tú. ¡Feliz cumpleaños!"</p></div></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Feliz Día</h2><p>"Que la vida te devuelva toda la alegría que das. ¡Te deseo el mejor de los cumpleaños!"</p></div></div>
         </section>
     </div>
 
     <script>
         function comenzar() {
+            // Reproducir música
+            var musica = document.getElementById('miMusica');
+            musica.play().catch(function(error) {
+                console.log("La reproducción automática fue bloqueada, pero iniciará al interactuar.");
+            });
+
+            // Transición de portada
             document.getElementById('portada').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('portada').style.display = 'none';
@@ -190,11 +204,12 @@
             }, 1000);
         }
 
+        // Observador para efectos al deslizar
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) entry.target.classList.add('active');
             });
-        }, { threshold: 0.6 });
+        }, { threshold: 0.5 });
 
         document.querySelectorAll('section').forEach(s => observer.observe(s));
     </script>
