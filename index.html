@@ -10,38 +10,48 @@
         
         :root {
             --gold: #c5a059;
-            --glass: rgba(0, 0, 0, 0.75);
-            /* Colores Neutros Originales */
-            --gris-oscuro: #1a1a1a;
-            --gris-medio: #3a3a3a;
-            --verde-neutro: #4a5d4a;
+            --glass: rgba(0, 0, 0, 0.6);
+            --gris: #2c2c2c;
+            --verde: #3d4a3d;
         }
 
         body, html {
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
             color: white;
-            overflow: hidden; /* Bloqueo inicial */
-            background-color: var(--gris-oscuro);
+            overflow: hidden;
+            background: #111;
         }
 
-        /* FONDO ANIMADO NEUTRO (Gris y Verde) */
-        .background-animated {
+        /* FONDO CON VIDA: ESFERAS QUE FLUYEN */
+        .background-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
-            background: linear-gradient(45deg, var(--gris-oscuro), var(--gris-medio), var(--verde-neutro), var(--gris-oscuro));
-            background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
+            z-index: -1;
+            overflow: hidden;
+            background: #1a1a1a;
+            filter: blur(80px); /* Esto crea el efecto de mezcla suave */
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: move 20s infinite alternate;
         }
 
-        /* PORTADA (Pantalla limpia) */
+        .blob.one { background: var(--gris); top: -10%; left: -10%; }
+        .blob.two { background: var(--verde); bottom: -10%; right: -10%; animation-duration: 25s; }
+        .blob.three { background: #333; top: 40%; left: 30%; animation-duration: 18s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(200px, 100px) scale(1.2); }
+        }
+
+        /* PORTADA APARTE */
         #portada {
             height: 100vh;
             width: 100%;
@@ -49,170 +59,89 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
             z-index: 100;
             position: fixed;
-            top: 0;
-            left: 0;
-            background: inherit;
-            transition: opacity 1s ease;
+            background: rgba(18, 18, 18, 0.9);
+            transition: 1s ease;
         }
 
         #portada h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: 3.5rem;
             color: var(--gold);
-            margin-bottom: 25px;
-            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
         }
 
         .btn-start {
-            padding: 18px 55px;
+            padding: 18px 50px;
             border: 2px solid var(--gold);
             background: transparent;
             color: var(--gold);
             letter-spacing: 5px;
-            font-weight: 600;
             cursor: pointer;
             text-transform: uppercase;
-            transition: 0.5s;
+            font-weight: 600;
         }
 
-        .btn-start:hover {
-            background: var(--gold);
-            color: black;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
-        }
-
-        /* CONTENIDO DESLIZABLE CON EFECTO ESPECIAL */
+        /* CONTENIDO */
         #main-content {
             display: none;
             height: 100vh;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
         }
 
         section {
             height: 100vh;
             width: 100%;
             display: flex;
-            flex-direction: row; /* Default PC */
             scroll-snap-align: start;
-            overflow: hidden; /* Necesario para el efecto de revelación */
-        }
-
-        /* IZQUIERDA: FOTO (Con efecto) */
-        .foto-lado {
-            width: 50%;
-            height: 100%;
-            overflow: hidden;
-            border-right: 2px solid var(--gold);
             position: relative;
         }
 
-        .foto-bg {
-            width: 100%;
-            height: 100%;
+        .foto-lado {
+            width: 50%; height: 100%;
             background-size: cover;
             background-position: center;
-            /* EFECTO INICIAL: Oculto a la izquierda */
-            transform: translateX(-100%);
-            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            border-right: 1px solid var(--gold);
+            transform: scale(0.9); opacity: 0;
+            transition: 1.5s ease;
         }
 
-        /* CUANDO LA SECCIÓN ESTÁ ACTIVA */
-        section.active .foto-bg {
-            transform: translateX(0); /* Revelar foto */
-        }
-
-        /* DERECHA: TEXTO (Con efecto) */
         .texto-lado {
-            width: 50%;
-            height: 100%;
-            background: var(--glass);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 50px;
-            backdrop-filter: blur(8px);
-            /* EFECTO INICIAL: Oculto a la derecha */
-            transform: translateX(100%);
-            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        section.active .texto-lado {
-            transform: translateX(0); /* Revelar texto */
+            width: 50%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            padding: 40px; background: var(--glass);
+            backdrop-filter: blur(10px);
         }
 
         .texto-inner {
             text-align: right;
-            border-right: 4px solid var(--gold);
-            padding-right: 25px;
-            max-width: 450px;
-            opacity: 0;
-            transition: opacity 1s ease 0.8s; /* Retraso para que la foto llegue primero */
+            border-right: 3px solid var(--gold);
+            padding-right: 20px;
+            opacity: 0; transform: translateY(30px);
+            transition: 1s ease 0.5s;
         }
 
-        section.active .texto-inner {
-            opacity: 1; /* Fade-in del texto */
-        }
+        /* ACTIVACIÓN DE EFECTOS AL DESLIZAR */
+        section.active .foto-lado { transform: scale(1); opacity: 1; }
+        section.active .texto-inner { opacity: 1; transform: translateY(0); }
 
-        .texto-inner h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-bottom: 15px;
-        }
-
-        .texto-inner p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        /* OPTIMIZACIÓN ESPECIAL PARA TELÉFONO */
-        @media (max-width: 900px) {
+        @media (max-width: 800px) {
             section { flex-direction: column; }
-            
-            .foto-lado, .texto-lado {
-                width: 100%;
-                height: 50%;
-                border-right: none;
-                transform: none; /* Desactivar efecto lateral en móvil */
-                transition: none;
-            }
-
-            .foto-lado { border-bottom: 2px solid var(--gold); overflow: visible; }
-
-            .foto-bg {
-                transform: scale(0.8); /* EFECTO MÓVIL: Pequeño */
-                opacity: 0;
-                transition: transform 1.2s ease, opacity 1s ease;
-            }
-
-            section.active .foto-bg {
-                transform: scale(1); /* Expandir suavemente */
-                opacity: 1;
-            }
-
-            .texto-lado {
-                transform: translateY(100%); /* EFECTO MÓVIL: Desde abajo */
-                transition: transform 1s ease 0.3s;
-            }
-
-            section.active .texto-lado {
-                transform: translateY(0);
-            }
-
-            .texto { padding: 30px; }
-            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid var(--gold); padding: 0 0 20px 0; max-width: 90%; }
+            .foto-lado, .texto-lado { width: 100%; height: 50%; }
+            .texto-inner { text-align: center; border-right: none; border-bottom: 3px solid var(--gold); padding: 0 0 10px 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="background-animated"></div>
+    <div class="background-container">
+        <div class="blob one"></div>
+        <div class="blob two"></div>
+        <div class="blob three"></div>
+    </div>
 
     <div id="portada">
         <h1>William.</h1>
@@ -220,103 +149,54 @@
     </div>
 
     <div id="main-content">
-        
         <section id="s1">
-            <div class="foto-lado">
-                <div class="foto-bg" style="background-image: url('foto1.jpg');"></div>
-            </div>
-            <div class="texto-lado">
-                <div class="texto-inner">
-                    <h2>Disciplina</h2>
-                    <p>"Verte graduado fue confirmar lo que ya sabía: que tu disciplina no tiene límites. Admiro tu inteligencia y tu fuerza."</p>
-                </div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto1.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Disciplina</h2><p>"Tu disciplina no tiene límites. Admiro tu fuerza para perseguir metas."</p></div></div>
         </section>
 
         <section id="s2">
-            <div class="foto-lado">
-                <div class="foto-bg" style="background-image: url('foto2.jpg');"></div>
-            </div>
-            <div class="texto-lado">
-                <div class="texto-inner">
-                    <h2>Nobleza</h2>
-                    <p>"Tienes una esencia única. Esa ternura y bondad es lo que te hace ser una persona realmente especial en este mundo."</p>
-                </div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto2.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Nobleza</h2><p>"Esa bondad genuina es tu luz más brillante en este mundo."</p></div></div>
         </section>
 
         <section id="s3">
-            <div class="foto-lado">
-                <div class="foto-bg" style="background-image: url('foto3.jpg');"></div>
-            </div>
-            <div class="texto-lado">
-                <div class="texto-inner">
-                    <h2>Momentos</h2>
-                    <p>"Nuestro primer encuentro superó cualquier expectativa. Fue descubrir que el hombre frente a mí era excepcional."</p>
-                </div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto3.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Recuerdo</h2><p>"Nuestro primer encuentro superó cualquier sueño que tuve."</p></div></div>
         </section>
 
         <section id="s4">
-            <div class="foto-lado">
-                <div class="foto-bg" style="background-image: url('foto4.jpg');"></div>
-            </div>
-            <div class="texto-lado">
-                <div class="texto-inner">
-                    <h2>Autenticidad</h2>
-                    <p>"Eres el mejor legado de quienes te aman. Gracias por ser tan auténtico y dejarme ser parte de tu historia."</p>
-                </div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto4.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Esencia</h2><p>"Gracias por ser tan auténtico siempre conmigo."</p></div></div>
         </section>
 
         <section id="s5">
-            <div class="foto-lado">
-                <div class="foto-bg" style="background-image: url('foto5.jpg');"></div>
-            </div>
-            <div class="texto-lado">
-                <div class="texto-inner">
-                    <h2>Feliz Día</h2>
-                    <p>"Que este nuevo año te traiga tanta felicidad como la que tú provocas. Te deseo lo mejor hoy y siempre. ¡Feliz cumpleaños!"</p>
-                </div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto5.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Complicidad</h2><p>"Cada momento a tu lado es un regalo que atesoro profundamente."</p></div></div>
         </section>
 
+        <section id="s6">
+            <div class="foto-lado" style="background-image: url('foto6.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Feliz Día</h2><p>"Que este año sea tan increíble como tú. ¡Feliz cumpleaños!"</p></div></div>
+        </section>
     </div>
 
     <script>
         function comenzar() {
-            // Desvanecer portada y activar contenido
             document.getElementById('portada').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('portada').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                document.body.style.overflow = 'visible';
-                // Activar la primera sección manualmente al inicio
-                document.getElementById('s1').classList.add('active');
+                document.querySelector('section').classList.add('active');
             }, 1000);
         }
 
-        // --- EFECTO DE REVELACIÓN AL DESLIZAR ---
-        // Detecta qué sección está visible en la pantalla
-        const sections = document.querySelectorAll('section');
-        const options = {
-            threshold: 0.6 // La sección debe estar visible al 60% para activarse
-        };
-
-        const observer = new IntersectionObserver(function(entries, observer) {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (!entry.isIntersecting) {
-                    return; // Si no es visible, no hace nada
-                }
-                // Si es visible, añade la clase 'active' para iniciar la animación
-                entry.target.classList.add('active');
+                if(entry.isIntersecting) entry.target.classList.add('active');
             });
-        }, options);
+        }, { threshold: 0.6 });
 
-        // Activa el observador para cada sección
-        sections.forEach(section => {
-            observer.observe(section);
-        });
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
     </script>
 </body>
 </html>
