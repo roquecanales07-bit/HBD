@@ -10,35 +10,37 @@
         
         :root {
             --gold: #c5a059;
-            --glass: rgba(0, 0, 0, 0.85);
-            --bg-dark: #121212;
+            --glass: rgba(0, 0, 0, 0.7);
+            --gris-oscuro: #1a1a1a;
+            --gris-medio: #3a3a3a;
+            --verde-neutro: #4a5d4a;
         }
 
         body, html {
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-dark);
             color: white;
-            overflow: hidden; /* Bloqueo total al inicio */
+            overflow: hidden; 
+            background-color: var(--gris-oscuro);
         }
 
-        /* FONDO ANIMADO PERMANENTE */
+        /* FONDO ANIMADO ORIGINAL */
         .bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: linear-gradient(-45deg, #1a1a1a, #333333, #2d3b2d, #1a1a1a);
+            z-index: -2;
+            background: linear-gradient(45deg, var(--gris-oscuro), var(--gris-medio), var(--verde-neutro), var(--gris-oscuro));
             background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+            animation: gradientMove 15s ease infinite;
         }
 
-        @keyframes gradient {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* PANTALLA 1: PORTADA SOLA */
+        /* PORTADA */
         #portada {
             height: 100vh;
             width: 100%;
@@ -49,80 +51,112 @@
             text-align: center;
             z-index: 100;
             position: fixed;
-            background: var(--bg-dark);
-            transition: opacity 0.8s ease;
+            background: inherit;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
         #portada h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
             color: var(--gold);
             margin-bottom: 20px;
         }
 
         .btn-start {
-            padding: 15px 45px;
+            padding: 18px 50px;
             border: 2px solid var(--gold);
             background: transparent;
             color: var(--gold);
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             font-weight: 600;
             cursor: pointer;
-            text-transform: uppercase;
+            transition: 0.4s;
         }
 
-        /* CONTENIDO QUE APARECE DESPUÉS */
+        .btn-start:hover {
+            background: var(--gold);
+            color: black;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
         #main-content {
-            display: none; 
+            display: none;
             height: 100vh;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
         }
 
         section {
             height: 100vh;
             width: 100%;
             display: flex;
-            flex-direction: column; /* Optimizado para celular */
             scroll-snap-align: start;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* EFECTO PARALLAX EN FOTOS */
+        .foto-container {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            border-right: 1px solid var(--gold);
         }
 
         .foto {
-            flex: 1; /* Mitad de la pantalla */
+            width: 100%;
+            height: 120%; /* Más alto para el efecto parallax */
             background-size: cover;
             background-position: center;
-            border-bottom: 2px solid var(--gold);
+            transition: transform 0.8s ease-out;
         }
 
+        /* EFECTO DE REVELACIÓN AL ENTRAR */
+        section.active .foto {
+            transform: scale(1.1);
+        }
+
+        /* TEXTO CON REVELACIÓN */
         .texto {
-            flex: 1; /* Mitad de la pantalla */
+            width: 50%;
+            height: 100%;
             background: var(--glass);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px;
-            backdrop-filter: blur(10px);
+            padding: 40px;
+            backdrop-filter: blur(12px);
         }
 
         .texto-inner {
-            text-align: center;
-            border-bottom: 3px solid var(--gold);
-            padding-bottom: 20px;
-            max-width: 90%;
+            text-align: right;
+            border-right: 4px solid var(--gold);
+            padding-right: 25px;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 1s ease 0.3s;
+        }
+
+        section.active .texto-inner {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .texto-inner h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--gold);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        /* DISEÑO PARA COMPUTADORA */
-        @media (min-width: 900px) {
-            section { flex-direction: row; }
-            .foto { border-bottom: none; border-right: 2px solid var(--gold); }
-            .texto-inner { text-align: right; border-bottom: none; border-right: 3px solid var(--gold); padding: 0 25px 0 0; }
+        /* MÓVIL */
+        @media (max-width: 800px) {
+            section { flex-direction: column; }
+            .foto-container, .texto { width: 100%; height: 50%; }
+            .foto-container { border-right: none; border-bottom: 2px solid var(--gold); }
+            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid var(--gold); padding: 0 0 15px 0; transform: translateY(30px); }
+            section.active .texto-inner { transform: translateY(0); }
         }
     </style>
 </head>
@@ -132,63 +166,70 @@
 
     <div id="portada">
         <h1>William.</h1>
-        <button class="btn-start" onclick="activarTodo()">Empezar</button>
+        <button class="btn-start" onclick="comenzar()">Empezar</button>
     </div>
 
     <div id="main-content">
-        
-        <section>
-            <div class="foto" style="background-image: url('foto1.jpg');"></div>
+        <section id="s1">
+            <div class="foto-container">
+                <div class="foto" style="background-image: url('foto1.jpg');"></div>
+            </div>
             <div class="texto">
                 <div class="texto-inner">
                     <h2>Disciplina</h2>
-                    <p>"Verte graduado fue confirmar lo que ya sabía: que tu disciplina no tiene límites. Admiro tu inteligencia."</p>
+                    <p>"Tu disciplina no tiene límites. Admiro profundamente la fuerza con la que persigues tus sueños."</p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="foto" style="background-image: url('foto2.jpg');"></div>
+        <section id="s2">
+            <div class="foto-container">
+                <div class="foto" style="background-image: url('foto2.jpg');"></div>
+            </div>
             <div class="texto">
                 <div class="texto-inner">
                     <h2>Nobleza</h2>
-                    <p>"Esa ternura y bondad es lo que te hace ser una persona realmente especial en este mundo."</p>
+                    <p>"Esa bondad genuina es tu luz más brillante. Eres una persona realmente especial."</p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="foto" style="background-image: url('foto3.jpg');"></div>
+        <section id="s3">
+            <div class="foto-container">
+                <div class="foto" style="background-image: url('foto3.jpg');"></div>
+            </div>
             <div class="texto">
                 <div class="texto-inner">
-                    <h2>Aquel Día</h2>
-                    <p>"Nuestro primer encuentro superó cualquier expectativa. Fue el inicio de algo muy lindo."</p>
+                    <h2>Momentos</h2>
+                    <p>"Nuestro primer encuentro fue descubrir que la realidad superaba cualquier sueño."</p>
                 </div>
             </div>
         </section>
-
-        <section>
-            <div class="foto" style="background-image: url('foto4.jpg');"></div>
-            <div class="texto">
-                <div class="texto-inner">
-                    <h2>Legado</h2>
-                    <p>"Gracias por ser auténtico y dejarme ser parte de tu historia. ¡Te deseo lo mejor!"</p>
-                </div>
-            </div>
-        </section>
-
     </div>
 
     <script>
-        function activarTodo() {
-            // Ocultar portada y mostrar contenido
-            document.getElementById('portada').style.opacity = '0';
+        function comenzar() {
+            document.getElementById('portada').style.transform = 'translateY(-100%)';
             setTimeout(() => {
                 document.getElementById('portada').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                document.body.style.overflow = 'visible';
-            }, 800);
+                // Activar la primera sección manualmente
+                document.querySelector('section').classList.add('active');
+            }, 1000);
         }
+
+        // Detectar qué sección está visible para activar el efecto
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
     </script>
 </body>
 </html>
