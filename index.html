@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Cumpleaños William</title>
+    <title>Para William</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,17 +14,16 @@
             color: white;
             overflow: hidden;
             background-color: #1a1a1a;
-            scroll-behavior: smooth;
         }
 
-        /* FONDO ANIMADO NEUTRO */
+        /* FONDO ANIMADO NEUTRO (Gris y Verde Oliva) */
         .bg-animated {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: linear-gradient(-45deg, #1a1a1a, #2c2c2c, #3d4a3d, #1a1a1a);
+            background: linear-gradient(-45deg, #1a1a1a, #2c2c2c, #3d4a3d, #2c2c2c);
             background-size: 400% 400%;
-            animation: gradientMove 15s ease-in-out infinite;
+            animation: gradientMove 12s ease-in-out infinite;
         }
 
         @keyframes gradientMove {
@@ -33,29 +32,22 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* PORTADA ESPECIAL */
+        /* PORTADA */
         #portada {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            position: fixed;
-            background: rgba(10, 10, 10, 0.92);
-            padding: 20px;
+            height: 100vh; width: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 100; position: fixed;
+            background: rgba(10, 10, 10, 0.9);
             text-align: center;
-            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+            transition: transform 1s cubic-bezier(0.7, 0, 0.3, 1);
         }
 
-        /* TÍTULO CON BRILLO DIRECCIONAL Y EMOJIS A COLOR */
         #portada h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.2rem, 9vw, 4.5rem);
             line-height: 1.3;
             margin-bottom: 40px;
-            position: relative;
         }
 
         .title-text {
@@ -67,22 +59,16 @@
             -webkit-text-fill-color: transparent;
             animation: shine 3s linear infinite;
             display: block;
-            margin-bottom: 10px;
-        }
-
-        .emojis {
-            display: block;
-            font-size: 1.2em;
-            /* Fuerza a los emojis a usar sus colores originales */
-            color: initial; 
-            -webkit-text-fill-color: initial;
-            background: none;
-            -webkit-background-clip: initial;
-            animation: pulseEmoji 2s infinite;
         }
 
         @keyframes shine { to { background-position: 200% center; } }
-        @keyframes pulseEmoji { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        .emojis {
+            display: block; font-size: 1.2em; margin-top: 10px;
+            /* Estos estilos aseguran que los emojis se vean originales */
+            -webkit-text-fill-color: initial !important; 
+            background: none !important;
+        }
 
         .btn-start {
             padding: 18px 50px;
@@ -95,144 +81,56 @@
             text-transform: uppercase;
             border-radius: 50px;
             transition: 0.4s;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
         }
 
-        .btn-start:hover {
-            background: #c5a059;
-            color: black;
-            box-shadow: 0 0 40px #c5a059;
-        }
-
-        /* CONTENIDO DESLIZABLE DINÁMICO */
+        /* CONTENIDO */
         #main-content {
-            display: none;
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
+            display: none; height: 100vh;
+            overflow-y: scroll; scroll-snap-type: y mandatory;
             -webkit-overflow-scrolling: touch;
         }
 
         section {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-            position: relative;
-            overflow: hidden;
+            height: 100vh; width: 100%;
+            display: flex; scroll-snap-align: start;
+            position: relative; overflow: hidden;
         }
 
-        /* FOTO CON EFECTO PARALLAX */
         .foto-lado {
             width: 50%; height: 100%;
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
             border-right: 2px solid #c5a059;
-            position: relative;
-            overflow: hidden;
+            opacity: 0; transform: scale(1.1);
+            transition: 1.5s ease;
         }
 
-        .foto-inner {
-            width: 100%;
-            height: 120%; /* Más alto para el efecto parallax al deslizar */
-            background-size: cover;
-            background-position: center;
-            position: absolute;
-            top: -10%; /* Centrado inicial */
-            transition: transform 0.8s ease-out;
-        }
-
-        /* TEXTO CON REVELADO DINÁMICO */
         .texto-lado {
             width: 50%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            padding: 50px; 
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(15px);
-            position: relative;
+            padding: 40px; background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(10px);
         }
 
         .texto-inner {
-            text-align: right;
-            border-right: 4px solid #c5a059;
-            padding-right: 30px;
-            max-width: 500px;
-            /* Efecto de revelado desde abajo */
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+            text-align: right; border-right: 4px solid #c5a059;
+            padding-right: 25px; opacity: 0;
+            transform: translateY(30px);
+            transition: 1s ease 0.5s;
         }
 
-        .texto-inner h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            color: #c5a059;
-            margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
-        }
+        section.active .foto-lado { opacity: 1; transform: scale(1); }
+        section.active .texto-inner { opacity: 1; transform: translateY(0); }
 
-        .texto-inner p {
-            font-size: 1.2rem;
-            line-height: 1.9;
-            font-weight: 300;
-        }
-
-        /* CUANDO LA SECCIÓN ESTÁ ACTIVA */
-        section.active .texto-inner {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* INDICADORES DE NAVEGACIÓN (PUNTOS) */
-        #nav-dots {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: none; /* Se activa con el botón */
-            flex-direction: column;
-            gap: 15px;
-            z-index: 50;
-        }
-
-        .dot {
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            background: rgba(197, 160, 89, 0.3);
-            border: 2px solid #c5a059;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .dot.active {
-            background: #c5a059;
-            box-shadow: 0 0 10px #c5a059;
-            transform: scale(1.3);
-        }
-
-        /* MÓVIL (Foto arriba, Texto abajo) */
         @media (max-width: 850px) {
             section { flex-direction: column; }
             .foto-lado, .texto-lado { width: 100%; height: 50%; }
-            .foto-lado { border-right: none; border-bottom: 2px solid #c5a059; }
-            .texto-lado { padding: 30px; }
-            .texto-inner { 
-                text-align: center; 
-                border-right: none; 
-                border-bottom: 4px solid #c5a059; 
-                padding-bottom: 20px; 
-                padding-right: 0; 
-                max-width: 90%;
-            }
-            .texto-inner h2 { font-size: 2.2rem; }
-            #nav-dots { right: 10px; }
+            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid #c5a059; padding-bottom: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <audio id="miMusica" loop>
+    <audio id="miMusica" loop preload="auto">
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
@@ -246,45 +144,58 @@
         <button class="btn-start" onclick="comenzar()">Abrir Regalo</button>
     </div>
 
-    <div id="nav-dots">
-        <div class="dot active" onclick="scrollToSection(0)"></div>
-        <div class="dot" onclick="scrollToSection(1)"></div>
-        <div class="dot" onclick="scrollToSection(2)"></div>
-        <div class="dot" onclick="scrollToSection(3)"></div>
-        <div class="dot" onclick="scrollToSection(4)"></div>
-        <div class="dot" onclick="scrollToSection(5)"></div>
-    </div>
-
     <div id="main-content">
         <section id="s1">
-            <div class="foto-lado">
-                <div class="foto-inner" style="background-image: url('foto1.jpg');"></div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto1.jpg');"></div>
             <div class="texto-lado"><div class="texto-inner"><h2>Disciplina</h2><p>"Tu disciplina no tiene límites. Admiro tu fuerza para alcanzar cada meta."</p></div></div>
         </section>
         <section id="s2">
-            <div class="foto-lado">
-                <div class="foto-inner" style="background-image: url('foto2.jpg');"></div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto2.jpg');"></div>
             <div class="texto-lado"><div class="texto-inner"><h2>Nobleza</h2><p>"Tu bondad es tu luz más brillante. Gracias por ese gran corazón."</p></div></div>
         </section>
         <section id="s3">
-            <div class="foto-lado">
-                <div class="foto-inner" style="background-image: url('foto3.jpg');"></div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto3.jpg');"></div>
             <div class="texto-lado"><div class="texto-inner"><h2>Recuerdo</h2><p>"Aquel primer encuentro superó cualquier sueño. Fue mágico."</p></div></div>
         </section>
         <section id="s4">
-            <div class="foto-lado">
-                <div class="foto-inner" style="background-image: url('foto4.jpg');"></div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto4.jpg');"></div>
             <div class="texto-lado"><div class="texto-inner"><h2>Autenticidad</h2><p>"Admiro que siempre eres tú mismo. Tu esencia es única."</p></div></div>
         </section>
         <section id="s5">
-            <div class="foto-lado">
-                <div class="foto-inner" style="background-image: url('foto5.jpg');"></div>
-            </div>
+            <div class="foto-lado" style="background-image: url('foto5.jpg');"></div>
             <div class="texto-lado"><div class="texto-inner"><h2>Complicidad</h2><p>"Cada momento compartido es un tesoro que guardo con cariño."</p></div></div>
         </section>
         <section id="s6">
-            <div class
+            <div class="foto-lado" style="background-image: url('foto6.jpg');"></div>
+            <div class="texto-lado"><div class="texto-inner"><h2>Feliz Día</h2><p>"Que la vida te devuelva toda la alegría que das. ¡Te quiero mucho!"</p></div></div>
+        </section>
+    </div>
+
+    <script>
+        function comenzar() {
+            // Intentar música pero no bloquear el resto si falla
+            var musica = document.getElementById('miMusica');
+            if (musica) {
+                musica.play().catch(function(e) { console.log("Música pausada por el navegador"); });
+            }
+            
+            // Transición forzada de la portada
+            document.getElementById('portada').style.transform = 'translateY(-100%)';
+            
+            setTimeout(function() {
+                document.getElementById('portada').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('s1').classList.add('active');
+            }, 800);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+    </script>
+</body>
+</html>
