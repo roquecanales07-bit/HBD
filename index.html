@@ -3,46 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para William | Especial</title>
+    <title>Para William</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        :root {
-            --gold: #c5a059;
-            --gold-glow: rgba(197, 160, 89, 0.8);
-            --glass: rgba(0, 0, 0, 0.75);
-            /* COLORES NEUTROS VIVOS */
-            --verde-neutro: #3d4a3d;
-            --gris-neutro: #2c2c2c;
-            --fondo-oscuro: #121212;
+        html {
+            scroll-behavior: smooth; /* Deslizado suave nativo */
         }
 
-        body, html {
+        body {
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
             color: white;
             overflow: hidden;
-            background-color: var(--fondo-oscuro);
+            /* FONDO MEZCLA GRIS Y VERDE NEUTRO DIRECTO */
+            background: linear-gradient(-45deg, #1a1a1a, #2c2c2c, #3d4a3d, #2c2c2c);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease-in-out infinite;
         }
 
-        /* FONDO ANIMADO CON MOVIMIENTO REAL */
-        .bg-vivo {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: linear-gradient(-45deg, var(--fondo-oscuro), var(--verde-neutro), var(--gris-neutro), var(--fondo-oscuro));
-            background-size: 300% 300%;
-            animation: fluirFondo 10s ease-in-out infinite;
-        }
-
-        @keyframes fluirFondo {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* PORTADA CON TÍTULO QUE BRILLA */
+        /* TÍTULO BRILLANTE */
         #portada {
             height: 100vh;
             width: 100%;
@@ -52,53 +39,47 @@
             align-items: center;
             z-index: 100;
             position: fixed;
-            background: rgba(0, 0, 0, 0.85);
-            transition: 1s ease;
+            background: rgba(15, 15, 15, 0.9);
+            transition: opacity 1.2s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
         #portada h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(3.5rem, 12vw, 6rem);
-            color: var(--gold);
+            color: #c5a059;
             text-transform: uppercase;
             letter-spacing: 8px;
-            text-align: center;
-            /* BRILLO EXTREMO */
-            text-shadow: 0 0 10px var(--gold-glow), 0 0 30px var(--gold-glow), 0 0 50px var(--gold);
-            animation: pulsoBrillo 2s infinite alternate;
+            /* BRILLO QUE PULSA */
+            text-shadow: 0 0 15px rgba(197, 160, 89, 0.7), 0 0 30px rgba(197, 160, 89, 0.5);
+            animation: pulseGlow 2.5s infinite alternate;
             margin-bottom: 40px;
         }
 
-        @keyframes pulsoBrillo {
-            from { transform: scale(1); text-shadow: 0 0 10px var(--gold-glow); }
-            to { transform: scale(1.05); text-shadow: 0 0 30px var(--gold-glow), 0 0 60px var(--gold); }
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 10px rgba(197, 160, 89, 0.6); transform: scale(1); }
+            to { text-shadow: 0 0 30px rgba(197, 160, 89, 1), 0 0 50px #c5a059; transform: scale(1.03); }
         }
 
         .btn-start {
             padding: 20px 60px;
-            border: 3px solid var(--gold);
+            border: 2px solid #c5a059;
             background: transparent;
-            color: var(--gold);
+            color: #c5a059;
             letter-spacing: 5px;
             cursor: pointer;
             text-transform: uppercase;
             font-weight: 600;
             transition: 0.4s;
-            box-shadow: 0 0 15px var(--gold-glow);
         }
 
-        .btn-start:hover {
-            background: var(--gold);
-            color: black;
-            box-shadow: 0 0 40px var(--gold);
-        }
-
-        /* SECCIONES */
+        /* CONTENIDO CON SCROLL DELICADO */
         #main-content {
             display: none;
             height: 100vh;
             overflow-y: scroll;
-            scroll-snap-type: y mandatory;
+            /* Scroll Snap Delicado */
+            scroll-snap-type: y mandatory; 
+            -webkit-overflow-scrolling: touch;
         }
 
         section {
@@ -106,6 +87,7 @@
             width: 100%;
             display: flex;
             scroll-snap-align: start;
+            scroll-snap-stop: always; /* Obliga a detenerse en cada sección */
             position: relative;
         }
 
@@ -113,33 +95,35 @@
             width: 50%; height: 100%;
             background-size: cover;
             background-position: center;
-            border-right: 2px solid var(--gold);
-            opacity: 0; transform: scale(1.2);
-            transition: 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+            border-right: 1px solid #c5a059;
+            opacity: 0; transform: scale(1.1);
+            transition: 2s cubic-bezier(0.2, 1, 0.2, 1); /* Más lento */
         }
 
         .texto-lado {
             width: 50%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            padding: 40px; background: var(--glass);
-            backdrop-filter: blur(15px);
+            padding: 40px; 
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(10px);
         }
 
         .texto-inner {
             text-align: right;
-            border-right: 4px solid var(--gold);
+            border-right: 4px solid #c5a059;
             padding-right: 25px;
-            opacity: 0; transform: translateX(50px);
-            transition: 1s ease 0.6s;
+            opacity: 0; transform: translateY(40px);
+            transition: 1.5s ease 0.4s;
         }
 
         section.active .foto-lado { opacity: 1; transform: scale(1); }
-        section.active .texto-inner { opacity: 1; transform: translateX(0); }
+        section.active .texto-inner { opacity: 1; transform: translateY(0); }
 
+        /* AJUSTE PARA MÓVIL (FOTO ARRIBA, TEXTO ABAJO) */
         @media (max-width: 850px) {
             section { flex-direction: column; }
             .foto-lado, .texto-lado { width: 100%; height: 50%; }
-            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid var(--gold); padding-bottom: 15px; }
+            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid #c5a059; padding-bottom: 15px; }
         }
     </style>
 </head>
@@ -148,8 +132,6 @@
     <audio id="miMusica" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
-
-    <div class="bg-vivo"></div>
 
     <div id="portada">
         <h1>William</h1>
@@ -186,19 +168,23 @@
     <script>
         function comenzar() {
             var musica = document.getElementById('miMusica');
-            musica.play().catch(e => console.log("Audio en espera"));
+            musica.play().catch(e => console.log("Audio listo"));
             
             document.getElementById('portada').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('portada').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 document.getElementById('s1').classList.add('active');
-            }, 1000);
+            }, 1200);
         }
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) entry.target.classList.add('active');
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    entry.target.classList.remove('active'); // Permite repetir el efecto
+                }
             });
         }, { threshold: 0.5 });
 
