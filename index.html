@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para William</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --gold: #c5a059;
+            --glass: rgba(0, 0, 0, 0.85);
+            --bg-dark: #121212;
+        }
+
+        body, html {
+            height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow: hidden; /* Bloqueo total al inicio */
+        }
+
+        /* FONDO ANIMADO PERMANENTE */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #1a1a1a, #333333, #2d3b2d, #1a1a1a);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* PANTALLA 1: PORTADA SOLA */
+        #portada {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 100;
+            position: fixed;
+            background: var(--bg-dark);
+            transition: opacity 0.8s ease;
+        }
+
+        #portada h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .btn-start {
+            padding: 15px 45px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            letter-spacing: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* CONTENIDO QUE APARECE DESPUÉS */
+        #main-content {
+            display: none; 
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column; /* Optimizado para celular */
+            scroll-snap-align: start;
+        }
+
+        .foto {
+            flex: 1; /* Mitad de la pantalla */
+            background-size: cover;
+            background-position: center;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .texto {
+            flex: 1; /* Mitad de la pantalla */
+            background: var(--glass);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .texto-inner {
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+            padding-bottom: 20px;
+            max-width: 90%;
+        }
+
+        .texto-inner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        /* DISEÑO PARA COMPUTADORA */
+        @media (min-width: 900px) {
+            section { flex-direction: row; }
+            .foto { border-bottom: none; border-right: 2px solid var(--gold); }
+            .texto-inner { text-align: right; border-bottom: none; border-right: 3px solid var(--gold); padding: 0 25px 0 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer"></div>
+
+    <div id="portada">
+        <h1>William.</h1>
+        <button class="btn-start" onclick="activarTodo()">Empezar</button>
+    </div>
+
+    <div id="main-content">
+        
+        <section>
+            <div class="foto" style="background-image: url('foto1.jpg');"></div>
+            <div class="texto">
+                <div class="texto-inner">
+                    <h2>Disciplina</h2>
+                    <p>"Verte graduado fue confirmar lo que ya sabía: que tu disciplina no tiene límites. Admiro tu inteligencia."</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="foto" style="background-image: url('foto2.jpg');"></div>
+            <div class="texto">
+                <div class="texto-inner">
+                    <h2>Nobleza</h2>
+                    <p>"Esa ternura y bondad es lo que te hace ser una persona realmente especial en este mundo."</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="foto" style="background-image: url('foto3.jpg');"></div>
+            <div class="texto">
+                <div class="texto-inner">
+                    <h2>Aquel Día</h2>
+                    <p>"Nuestro primer encuentro superó cualquier expectativa. Fue el inicio de algo muy lindo."</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="foto" style="background-image: url('foto4.jpg');"></div>
+            <div class="texto">
+                <div class="texto-inner">
+                    <h2>Legado</h2>
+                    <p>"Gracias por ser auténtico y dejarme ser parte de tu historia. ¡Te deseo lo mejor!"</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        function activarTodo() {
+            // Ocultar portada y mostrar contenido
+            document.getElementById('portada').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('portada').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.body.style.overflow = 'visible';
+            }, 800);
+        }
+    </script>
+</body>
+</html>
