@@ -10,7 +10,8 @@
         
         :root {
             --gold: #c5a059;
-            --glass: rgba(0, 0, 0, 0.7);
+            --glass: rgba(0, 0, 0, 0.75);
+            /* Colores Neutros Originales */
             --gris-oscuro: #1a1a1a;
             --gris-medio: #3a3a3a;
             --verde-neutro: #4a5d4a;
@@ -20,12 +21,12 @@
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
             color: white;
-            overflow: hidden; 
+            overflow: hidden; /* Bloqueo inicial */
             background-color: var(--gris-oscuro);
         }
 
-        /* FONDO ANIMADO ORIGINAL */
-        .bg-layer {
+        /* FONDO ANIMADO NEUTRO (Gris y Verde) */
+        .background-animated {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
@@ -40,7 +41,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* PORTADA */
+        /* PORTADA (Pantalla limpia) */
         #portada {
             height: 100vh;
             width: 100%;
@@ -51,34 +52,39 @@
             text-align: center;
             z-index: 100;
             position: fixed;
+            top: 0;
+            left: 0;
             background: inherit;
-            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: opacity 1s ease;
         }
 
         #portada h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.5rem, 8vw, 4rem);
             color: var(--gold);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
         }
 
         .btn-start {
-            padding: 18px 50px;
+            padding: 18px 55px;
             border: 2px solid var(--gold);
             background: transparent;
             color: var(--gold);
             letter-spacing: 5px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.4s;
+            text-transform: uppercase;
+            transition: 0.5s;
         }
 
         .btn-start:hover {
             background: var(--gold);
             color: black;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
         }
 
-        /* CONTENEDOR PRINCIPAL */
+        /* CONTENIDO DESLIZABLE CON EFECTO ESPECIAL */
         #main-content {
             display: none;
             height: 100vh;
@@ -91,56 +97,65 @@
             height: 100vh;
             width: 100%;
             display: flex;
+            flex-direction: row; /* Default PC */
             scroll-snap-align: start;
-            overflow: hidden;
-            position: relative;
+            overflow: hidden; /* Necesario para el efecto de revelación */
         }
 
-        /* EFECTO PARALLAX EN FOTOS */
-        .foto-container {
+        /* IZQUIERDA: FOTO (Con efecto) */
+        .foto-lado {
             width: 50%;
             height: 100%;
             overflow: hidden;
-            border-right: 1px solid var(--gold);
+            border-right: 2px solid var(--gold);
+            position: relative;
         }
 
-        .foto {
+        .foto-bg {
             width: 100%;
-            height: 120%; /* Más alto para el efecto parallax */
+            height: 100%;
             background-size: cover;
             background-position: center;
-            transition: transform 0.8s ease-out;
+            /* EFECTO INICIAL: Oculto a la izquierda */
+            transform: translateX(-100%);
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* EFECTO DE REVELACIÓN AL ENTRAR */
-        section.active .foto {
-            transform: scale(1.1);
+        /* CUANDO LA SECCIÓN ESTÁ ACTIVA */
+        section.active .foto-bg {
+            transform: translateX(0); /* Revelar foto */
         }
 
-        /* TEXTO CON REVELACIÓN */
-        .texto {
+        /* DERECHA: TEXTO (Con efecto) */
+        .texto-lado {
             width: 50%;
             height: 100%;
             background: var(--glass);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px;
-            backdrop-filter: blur(12px);
+            padding: 50px;
+            backdrop-filter: blur(8px);
+            /* EFECTO INICIAL: Oculto a la derecha */
+            transform: translateX(100%);
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        section.active .texto-lado {
+            transform: translateX(0); /* Revelar texto */
         }
 
         .texto-inner {
             text-align: right;
             border-right: 4px solid var(--gold);
             padding-right: 25px;
+            max-width: 450px;
             opacity: 0;
-            transform: translateX(30px);
-            transition: all 1s ease 0.3s;
+            transition: opacity 1s ease 0.8s; /* Retraso para que la foto llegue primero */
         }
 
         section.active .texto-inner {
-            opacity: 1;
-            transform: translateX(0);
+            opacity: 1; /* Fade-in del texto */
         }
 
         .texto-inner h2 {
@@ -150,19 +165,54 @@
             margin-bottom: 15px;
         }
 
-        /* MÓVIL */
-        @media (max-width: 800px) {
+        .texto-inner p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        /* OPTIMIZACIÓN ESPECIAL PARA TELÉFONO */
+        @media (max-width: 900px) {
             section { flex-direction: column; }
-            .foto-container, .texto { width: 100%; height: 50%; }
-            .foto-container { border-right: none; border-bottom: 2px solid var(--gold); }
-            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid var(--gold); padding: 0 0 15px 0; transform: translateY(30px); }
-            section.active .texto-inner { transform: translateY(0); }
+            
+            .foto-lado, .texto-lado {
+                width: 100%;
+                height: 50%;
+                border-right: none;
+                transform: none; /* Desactivar efecto lateral en móvil */
+                transition: none;
+            }
+
+            .foto-lado { border-bottom: 2px solid var(--gold); overflow: visible; }
+
+            .foto-bg {
+                transform: scale(0.8); /* EFECTO MÓVIL: Pequeño */
+                opacity: 0;
+                transition: transform 1.2s ease, opacity 1s ease;
+            }
+
+            section.active .foto-bg {
+                transform: scale(1); /* Expandir suavemente */
+                opacity: 1;
+            }
+
+            .texto-lado {
+                transform: translateY(100%); /* EFECTO MÓVIL: Desde abajo */
+                transition: transform 1s ease 0.3s;
+            }
+
+            section.active .texto-lado {
+                transform: translateY(0);
+            }
+
+            .texto { padding: 30px; }
+            .texto-inner { text-align: center; border-right: none; border-bottom: 4px solid var(--gold); padding: 0 0 20px 0; max-width: 90%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-layer"></div>
+    <div class="background-animated"></div>
 
     <div id="portada">
         <h1>William.</h1>
@@ -170,64 +220,101 @@
     </div>
 
     <div id="main-content">
+        
         <section id="s1">
-            <div class="foto-container">
-                <div class="foto" style="background-image: url('foto1.jpg');"></div>
+            <div class="foto-lado">
+                <div class="foto-bg" style="background-image: url('foto1.jpg');"></div>
             </div>
-            <div class="texto">
+            <div class="texto-lado">
                 <div class="texto-inner">
                     <h2>Disciplina</h2>
-                    <p>"Tu disciplina no tiene límites. Admiro profundamente la fuerza con la que persigues tus sueños."</p>
+                    <p>"Verte graduado fue confirmar lo que ya sabía: que tu disciplina no tiene límites. Admiro tu inteligencia y tu fuerza."</p>
                 </div>
             </div>
         </section>
 
         <section id="s2">
-            <div class="foto-container">
-                <div class="foto" style="background-image: url('foto2.jpg');"></div>
+            <div class="foto-lado">
+                <div class="foto-bg" style="background-image: url('foto2.jpg');"></div>
             </div>
-            <div class="texto">
+            <div class="texto-lado">
                 <div class="texto-inner">
                     <h2>Nobleza</h2>
-                    <p>"Esa bondad genuina es tu luz más brillante. Eres una persona realmente especial."</p>
+                    <p>"Tienes una esencia única. Esa ternura y bondad es lo que te hace ser una persona realmente especial en este mundo."</p>
                 </div>
             </div>
         </section>
 
         <section id="s3">
-            <div class="foto-container">
-                <div class="foto" style="background-image: url('foto3.jpg');"></div>
+            <div class="foto-lado">
+                <div class="foto-bg" style="background-image: url('foto3.jpg');"></div>
             </div>
-            <div class="texto">
+            <div class="texto-lado">
                 <div class="texto-inner">
                     <h2>Momentos</h2>
-                    <p>"Nuestro primer encuentro fue descubrir que la realidad superaba cualquier sueño."</p>
+                    <p>"Nuestro primer encuentro superó cualquier expectativa. Fue descubrir que el hombre frente a mí era excepcional."</p>
                 </div>
             </div>
         </section>
+
+        <section id="s4">
+            <div class="foto-lado">
+                <div class="foto-bg" style="background-image: url('foto4.jpg');"></div>
+            </div>
+            <div class="texto-lado">
+                <div class="texto-inner">
+                    <h2>Autenticidad</h2>
+                    <p>"Eres el mejor legado de quienes te aman. Gracias por ser tan auténtico y dejarme ser parte de tu historia."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="s5">
+            <div class="foto-lado">
+                <div class="foto-bg" style="background-image: url('foto5.jpg');"></div>
+            </div>
+            <div class="texto-lado">
+                <div class="texto-inner">
+                    <h2>Feliz Día</h2>
+                    <p>"Que este nuevo año te traiga tanta felicidad como la que tú provocas. Te deseo lo mejor hoy y siempre. ¡Feliz cumpleaños!"</p>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <script>
         function comenzar() {
-            document.getElementById('portada').style.transform = 'translateY(-100%)';
+            // Desvanecer portada y activar contenido
+            document.getElementById('portada').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('portada').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                // Activar la primera sección manualmente
-                document.querySelector('section').classList.add('active');
+                document.body.style.overflow = 'visible';
+                // Activar la primera sección manualmente al inicio
+                document.getElementById('s1').classList.add('active');
             }, 1000);
         }
 
-        // Detectar qué sección está visible para activar el efecto
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.5 });
+        // --- EFECTO DE REVELACIÓN AL DESLIZAR ---
+        // Detecta qué sección está visible en la pantalla
+        const sections = document.querySelectorAll('section');
+        const options = {
+            threshold: 0.6 // La sección debe estar visible al 60% para activarse
+        };
 
-        document.querySelectorAll('section').forEach(section => {
+        const observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return; // Si no es visible, no hace nada
+                }
+                // Si es visible, añade la clase 'active' para iniciar la animación
+                entry.target.classList.add('active');
+            });
+        }, options);
+
+        // Activa el observador para cada sección
+        sections.forEach(section => {
             observer.observe(section);
         });
     </script>
