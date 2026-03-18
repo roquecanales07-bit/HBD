@@ -147,7 +147,7 @@
 </head>
 <body>
 
-    <audio id="miMusica" loop preload="auto">
+   <audio id="miMusica" loop preload="auto" playsinline>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
@@ -216,27 +216,30 @@
     <script>
         var musica = document.getElementById('miMusica');
 
-        function irPaginaDos() {
-            // Asegurar que la música suene al primer clic
-            musica.play().catch(e => console.log("Audio iniciado"));
-            // Deslizar página 1 hacia arriba
+       function irPaginaDos() {
+            var musica = document.getElementById('miMusica');
+            
+            // 1. FORZAR AUDIO: Volumen y Play
+            musica.volume = 1.0; 
+            musica.play();
+
+            // 2. ANIMACIÓN: Deslizar portadas
             document.getElementById('portada').style.transform = 'translateY(-100%)';
-            // Traer página 2 desde abajo
             document.getElementById('pagina-dos').style.transform = 'translateY(0)';
         }
 
         function comenzarTodo() {
-            // Deslizar página 2 hacia arriba
+            // Re-confirmar audio por si acaso
+            document.getElementById('miMusica').play();
+
             document.getElementById('pagina-dos').style.transform = 'translateY(-100%)';
             
             setTimeout(function() {
-                // Ocultar portadas y mostrar contenido
                 document.getElementById('pagina-dos').style.display = 'none';
                 document.getElementById('portada').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                // Activar animación de la primera sección
                 document.getElementById('s1').classList.add('active');
-            }, 1000); // Pequeño retraso para que la transición de portada termine
+            }, 1000);
         }
 
         // Observador para activar efectos al deslizar
