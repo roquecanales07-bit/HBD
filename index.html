@@ -216,24 +216,29 @@
     <script>
         var musica = document.getElementById('miMusica');
 
-       function irPaginaDos() {
-            var musica = document.getElementById('miMusica');
+        function irPaginaDos() {
+            // Forzar carga y reproducción
+            musica.load(); 
+            musica.volume = 1.0;
             
-            // 1. FORZAR AUDIO: Volumen y Play
-            musica.volume = 1.0; 
-            musica.play();
+            var promise = musica.play();
+            if (promise !== undefined) {
+                promise.then(_ => {
+                    console.log("Reproduciendo!");
+                }).catch(error => {
+                    console.log("El navegador bloqueó el audio inicialmente");
+                });
+            }
 
-            // 2. ANIMACIÓN: Deslizar portadas
             document.getElementById('portada').style.transform = 'translateY(-100%)';
             document.getElementById('pagina-dos').style.transform = 'translateY(0)';
         }
 
         function comenzarTodo() {
-            // Re-confirmar audio por si acaso
-            document.getElementById('miMusica').play();
-
-            document.getElementById('pagina-dos').style.transform = 'translateY(-100%)';
+            // Segundo intento de play por si el primero falló
+            musica.play();
             
+            document.getElementById('pagina-dos').style.transform = 'translateY(-100%)';
             setTimeout(function() {
                 document.getElementById('pagina-dos').style.display = 'none';
                 document.getElementById('portada').style.display = 'none';
